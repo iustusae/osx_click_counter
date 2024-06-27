@@ -1,8 +1,8 @@
 #include "core/KeystrokeListener.hpp"
 #include "core/Listener.hpp"
 #include "core/MouseClickListener.hpp"
-
-int main() {
+#include <type_traits>
+auto main() -> int {
   MouseClickListener listener{};
   KeystrokeListener k_listener{};
 
