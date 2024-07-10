@@ -1,7 +1,7 @@
 
 
-#pragma once
-
+#ifndef LISTENER_HPP
+#define LISTENER_HPP
 #include <CoreFoundation/CFBase.h>
 #include <CoreFoundation/CFMachPort.h>
 #include <CoreFoundation/CFRunLoop.h>
@@ -9,13 +9,14 @@
 #include <CoreGraphics/CGEventTypes.h>
 #include <stdexcept>
 
+
 template <CGEventMask mask> class Listener {
 private:
   CFMachPortRef m_tap;
   CFRunLoopSourceRef m_loop_source;
 
 public:
-  Listener(CGEventTapCallBack callback)
+  explicit Listener(CGEventTapCallBack callback)
       : m_tap(
             CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap,
                              kCGEventTapOptionDefault, mask, callback, nullptr)
@@ -31,7 +32,6 @@ public:
     CGEventTapEnable(m_tap, true);
   }
 
-  void listen() const noexcept { CFRunLoopRun(); }
 
   ~Listener() {
     CFRelease(m_loop_source);
@@ -39,6 +39,8 @@ public:
   }
 };
 
+
 namespace core {
 inline void listenToEvents() { CFRunLoopRun(); }
 } // namespace core
+#endif

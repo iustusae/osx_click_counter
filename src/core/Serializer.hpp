@@ -1,30 +1,21 @@
-#pragma once
 
-#include "KeystrokeListener.hpp"
-#include "MouseClickListener.hpp"
+#ifndef SERIALIZER_CC_HPP
+#define SERIALIZER_CC_HPP
+#include "ListenerDataTypes.h"
+#include <chrono>
+#include <fstream>
+#include <nlohmann/json.hpp>
+#include <sstream>
 
 namespace Serializer {
 
-struct WholeData {
-  int date;
-  MCL::MCL_Data *mcl_data;
-  KL::KL_Data *kl_data;
+    inline void serialize(const WholeData &wholedata) {
+        nlohmann::json j{};
+        j.push_back(wholedata.m_data);
 
-  void flush() {
-    *mcl_data = {};
-    *kl_data = {};
-  }
-};
-
-void serialize() {
-  WholeData data{0, &MCL::data, &KL::data};
-
-  /**
-   *Do serialization shit w nlohmann
-   *
-   */
-
-  data.flush();
-}
-
+        std::ofstream file("click_count.json");
+        file << j.dump(4);
+    }
 } // namespace Serializer
+
+#endif
